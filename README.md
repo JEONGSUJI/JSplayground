@@ -1,2 +1,2 @@
-# JSplayground
-fastcampus JS 강의 과정
+# **JSplayground**
+- fastcampus JavaScript 강의 학습 폴더
