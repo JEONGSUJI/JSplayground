@@ -5,15 +5,9 @@ let todos = [
 ];
 
 function removeTodo(id) {
-  todos = todos.filter((item) => item.id !== 2);
+  todos = todos.filter((todo) => todo.id !== id);
 }
 
 removeTodo(2);
 
 console.log(todos);
-/*
-[
-  { id: 3, content: 'HTML', completed: false },
-  { id: 1, content: 'Javascript', completed: false }
-]
-*/

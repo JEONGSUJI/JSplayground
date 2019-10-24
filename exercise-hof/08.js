@@ -7,7 +7,7 @@ const todos = [
 ];
 
 function countCompletedTodos() {
-  return todos.reduce((pre, cur) => pre += (cur.completed === true ? 1 : 0), 0);
+  return todos.filter((todo) => todo.completed).length;
 }
 
-console.log(countCompletedTodos()); // 1
+console.log(countCompletedTodos());

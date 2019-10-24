@@ -4,11 +4,9 @@ let todos = [
   { id: 1, content: 'Javascript', completed: false }
 ];
 
-function addTodo(newTodo) {
-  const add = [newTodo];
-  todos = add.concat(todos);
+function getMaxId() {
+  const idNum = todos.map((todo) => todo.id);
+  return Math.max(...idNum);
 }
 
-addTodo({ id: 4, content: 'Test', completed: false });
-
-console.log(todos);
+console.log(getMaxId());

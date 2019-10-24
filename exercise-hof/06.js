@@ -9,20 +9,11 @@ let todos = [
 ];
 
 function toggleCompletedById(id) {
-  // console.log(todos[1].id);
-  // console.log(id);
 
-  todos = todos.map((todo, i) => (this.id === id ? !this.completed : ''));
+  todos = todos.map((todo) => todo.id === id ? ...todo.completed === !todos.completed : todo);
+  // Object.assign(todo, !todo[id].completed)
 }
 
 toggleCompletedById(2);
 
 console.log(todos);
-
-/*
-[
-  { id: 3, content: 'HTML', completed: false },
-  { id: 2, content: 'CSS', completed: false },
-  { id: 1, content: 'Javascript', completed: false }
-]
-*/

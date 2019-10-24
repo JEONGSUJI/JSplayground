@@ -31,7 +31,7 @@ for (var i = 0; i < 5; i++){
     result += ' ';
   }
 
-  for (var k = 1; k <= ((i * 2) + 1); k++){
+  for (var k = 1; k <= (i * 2) + 1; k++){
     result += '*';
   }
 
