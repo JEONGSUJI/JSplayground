@@ -9,7 +9,7 @@ let todos = [
 ];
 
 function toggleCompletedById(id) {
-  todos = todos.map((todo) => id === todo.id ? Object.assign(todo , {completed : !todo.completed}) : todo);
+  todos = todos.filter((todo) => id === todo.id ? Object.assign(todo , {completed : !todo.completed}) : todo);
 }
 
 toggleCompletedById(2);
