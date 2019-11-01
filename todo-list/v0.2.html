@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .todo-list:checked + .content{
+      text-decoration: line-through;
+    }
+  </style>
+  <title>Document</title>
+</head>
+<body>
+  <input type="text" class="content" placeholder="todo 입력">
+  <ul class="todos"></ul>
+
+  <script>
+  let todos = [];
+  const $todos = document.querySelector('.todos');
+  const $input = document.querySelector('.content');
+  
+  const render = function (){
+    let html = '';
+    todos.forEach((todo) => {
+      html += `
+      <li id="${todo.id}">
+        <label> 
+          <input type="checkbox" class="todo-list" ${todo.completed ? 'checked' : ''}> 
+          <span class="content">${todo.content}</span> 
+        </label>
+        <button class="remove">x</button>
+      </li>`;
+    });
+    $todos.innerHTML = html;
+  };
+  
+  // 서버에서 초기값을 가져옴
+  const getTodo = function(){
+    todos = [
+      { id: 1, content: 'HTML', completed: false },
+      { id: 2, content: 'CSS', completed: true },
+      { id: 3, content: 'JavaScript', completed: false }
+    ];
+    render();    
+  }
+
+  const addTodo = function (e){
+    if (e.keyCode !== 13 || $input.value.trim() === '') return;
+    const maxId = Math.max(...(todos.map((todo) => todo.id))) + 1;
+    todos = [...todos, { id: maxId, content: `${$input.value}` ,completed: false}];
+    render();
+  };
+
+  const removeTodo = function (e){
+    if (!e.target.classList.contains('remove')) return;
+    const id = +e.target.parentNode.id;
+    console.log(id);
+    todos = todos.filter((todo) => todo.id !== id);
+    console.log(todos);
+    render();
+  };
+
+  const checkTodo = function (e){
+    const content = +e.target.parentNode.parentNode.id;
+    todos = todos.map((todo) => {
+      todo.id === content ? Object.assign(todo , {completed: !todo.completed}): todo}
+    );
+    render();
+  };
+
+  // event
+  window.onload = getTodo;
+  $input.onkeyup = addTodo; // 입력하면 추가
+  $todos.onclick = removeTodo;// 삭제버튼 클릭하면 삭제
+  $todos.onchange = checkTodo;// 체크
+
+</script>
+</body>
+</html>
