@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .todo-list:checked + .content{
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <input type="text" placeholder="할 일을 입력하세요." class="input">
+  <ul class="todos"></ul>
+
+  <script>
+    const $text = document.querySelector('.input');
+    const $todos = document.querySelector('.todos');
+
+    $text.addEventListener('keyup', (e) => {
+      if (e.keyCode !== 13 || e.target.value.trim() === '') return;
+      $todos.innerHTML += `
+      <li>
+        <label> 
+          <input type="checkbox" class="todo-list"> 
+          <span class="content">${$text.value}</span> 
+        </label>
+        <button class="remove">x</button>
+      </li>`;
+      e.target.value = '';
+    });
+
+    $todos.addEventListener('click', ({ target }) => {
+      if (target.classList.contains('remove')) {
+        $todos.removeChild(target.parentNode);
+      }
+    });
+  </script>
+</body>
+</html>
