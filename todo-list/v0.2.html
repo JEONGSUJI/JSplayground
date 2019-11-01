@@ -33,24 +33,23 @@
     $todos.innerHTML = html;
   };
   
-  // 서버에서 초기값을 가져옴
-  const getTodo = function(){
+  const getTodo = () => {
     todos = [
       { id: 1, content: 'HTML', completed: false },
       { id: 2, content: 'CSS', completed: true },
       { id: 3, content: 'JavaScript', completed: false }
     ];
-    render();    
-  }
-
-  const addTodo = function (e){
-    if (e.keyCode !== 13 || $input.value.trim() === '') return;
-    const maxId = Math.max(...(todos.map((todo) => todo.id))) + 1;
-    todos = [...todos, { id: maxId, content: `${$input.value}` ,completed: false}];
     render();
   };
 
-  const removeTodo = function (e){
+  const addTodo = (e) => {
+    if (e.keyCode !== 13 || $input.value.trim() === '') return;
+    const maxId = Math.max(...(todos.map((todo) => todo.id))) + 1;
+    todos = [...todos, { id: maxId, content: `${$input.value}`, completed: false }];
+    render();
+  };
+
+  const removeTodo = (e) => {
     if (!e.target.classList.contains('remove')) return;
     const id = +e.target.parentNode.id;
     console.log(id);
@@ -59,20 +58,17 @@
     render();
   };
 
-  const checkTodo = function (e){
+  const checkTodo = (e) => {
     const content = +e.target.parentNode.parentNode.id;
-    todos = todos.map((todo) => {
-      todo.id === content ? Object.assign(todo , {completed: !todo.completed}): todo}
-    );
+    todos = todos.map((todo) => (todo.id === content ? Object.assign(todo, { completed: !todo.completed }) : todo));
     render();
   };
 
   // event
-  window.onload = getTodo;
+  window.onload = getTodo; // 초기값 가져오기
   $input.onkeyup = addTodo; // 입력하면 추가
   $todos.onclick = removeTodo;// 삭제버튼 클릭하면 삭제
-  $todos.onchange = checkTodo;// 체크
-
+  $todos.onchange = checkTodo;// 체크버튼 클릭
 </script>
 </body>
 </html>
