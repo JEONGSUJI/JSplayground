@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+      .check:checked + .content {
+        text-decoration: line-through;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" class="input" placeholder="할 일을 입력하세요." />
+    <ul class="todos"></ul>
+  </body>
+  <script>
+    const $text = document.querySelector('.input');
+    const $todos = document.querySelector('.todos');
+
+    $text.addEventListener('keyup', e => {
+      if (e.keyCode !== 13 || e.target.value.trim() === '') return;
+      $todos.innerHTML += `
+      <li>
+        <label>
+          <input type="checkbox" class="check">
+          <span class="content">${$text.value}</span>
+        </label>
+        <button class="remove">X</button>
+      </li>`;
+      e.target.value = '';
+    });
+
+    $todos.addEventListener('click', e => {
+      if (e.target.classList.contains('remove')) {
+        $todos.removeChild(e.target.parentNode);
+      }
+    });
+  </script>
+</html>
