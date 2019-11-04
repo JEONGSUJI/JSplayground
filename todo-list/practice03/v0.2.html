@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <style>
+  </style>
+  <title>Document</title>
+</head>
+<body>
+  <input type="text" class="content" placeholder="todo 입력">
+  <ul class="todos"></ul>
+</body>
+
+<script>
+  let todos = [];
+
+  const $input = document.querySelector('.content');
+  const $todos = document.querySelector('.todos');
+
+  const render = () => {
+    let html = '';
+    todos.forEach((todo) => html += `
+    <li id="${todo.id}">
+      <label>
+        <input type="checkbox" class="check" ${todo.completed ? 'checked' : ''}>
+        <span class="content">${todo.content}</span>
+      </label>
+    </li>
+    `; );
+
+    todos.map(todo => todo.id);
+
+    $todos.innerHTML = html;
+  };
+
+  const getTodo = () => {
+    
+  };
+
+  window.onload = getTodo;
+
+</script>
+</html>
