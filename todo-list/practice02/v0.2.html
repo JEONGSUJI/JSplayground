@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    .check:checked + .content {
+      text-decoration: line-through;
+    }
+  </style>
+  <title>Document</title>
+</head>
+<body>
+  <input type="text" class="content" placeholder="todo 입력">
+  <ul class="todos"></ul>
+</body>
+
+<script>
+  let todos = [];
+  const $todos = document.querySelector('.todos');
+  const $input = document.querySelector('.content');
+
+  // 2. 화면에 그리기
+  const render = () => {
+    let html = '';
+    todos.forEach((todo) => {
+      html += `
+        <li id="${todo.id}"">
+          <label>
+            <input type="checkbox" class="check" ${todo.completed ? 'checked' : ''}>
+            <span class="content">${todo.content}</span>
+          </label>
+          <button class="remove">X</button>
+        </li>`;
+    });
+    $todos.innerHTML = html;
+  };
+  
+  // 1. 서버에서 데이터 가져오기
+  const getTodos = () => {
+    todos = [
+      { id: 1, content: 'HTML', completed: false },
+      { id: 2, content: 'CSS', completed: true },
+      { id: 3, content: 'JavaScript', completed: false }
+    ];
+    render();
+  };
+
+  // 3. input enter 시 추가하기
+  const addTodo = (e) => {
+    if (e.keyCode !== 13 || $input.value.trim() === '') return;
+    const maxId = todos.length ? Math.max(...(todos.map((todo) => todo.id))) + 1 : 1;
+    todos = [...todos, { id: maxId, content: `${$input.value}`, completed: false }];
+    render();
+  };
+
+  // 4. remove btn click 시 해당 todo list 삭제하기
+  const removeTodo = (e) => {
+    if (!e.target.classList.contains('remove')) return;
+    const id = +e.target.parentNode.id;
+    todos = todos.filter((todo) => todo.id !== id);
+    // $todos.removeChild()
+    render();
+  };
+
+  // 5. change todo check
+  const changeTodo = (e) => {
+    const id = +e.target.parentNode.parentNode.id;
+    todos = todos.map((todo) => (todo.id === id ? {...todo, ...{ completed: !todo.complete }} : todo));
+    render();
+  };
+
+  window.onload = getTodos;
+  $input.onkeyup = addTodo;
+  $todos.onclick = removeTodo;
+  $todos.onchange = changeTodo;
+
+</script>
+</html>
