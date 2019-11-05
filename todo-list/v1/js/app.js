@@ -17,10 +17,8 @@ const render = () => {
     </li>`;
   });
   $todos.innerHTML = html;
-  $checkTodo.innerHTML = [todos.filter((todo) => todo.completed === true)].length;
-  $noCheckTodo.innerHTML = [todos.filter((todo) => todo.completed === false)].length;
-  console.log(todos.filter((todo) => todo.completed === false));
-  console.log([todos.filter((todo) => todo.completed === false)].length);
+  $checkTodo.innerHTML = todos.filter((todo) => todo.completed === true).length;
+  $noCheckTodo.innerHTML = todos.filter((todo) => todo.completed === false).length;
 };
 
 
