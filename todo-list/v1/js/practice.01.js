@@ -2,22 +2,29 @@ let todos = [];
 
 const $todos = document.querySelector('.todos');
 const $input = document.querySelector('.input-todo');
-
+const $completed = document.querySelector('.completed-todos');
+const $active = document.querySelector('.active-todos');
+const $btnCheck = document.querySelector('.clear-completed > .btn');
+const $completeAll = document.querySelector('.complete-all');
 // 0. render 하기
 
 const render = () => {
   let html = '';
 
-  todos.forEach((todo) => {
+  todos.forEach(todo => {
     html += `
     <li id="${todo.id}" class="todo-item">
-      <input class="checkbox" type="checkbox" id="ck-${todo.id}" ${todo.completed ? 'checked' : ''}>
-      <label for="ck-${todo.id}">${todo.content}</label>
-      <i class="remove-todo far fa-times-circle"></i>
+    <input class="checkbox" type="checkbox" id="ck-${todo.id}" ${todo.completed ? 'checked' : ''}>
+    <label for="ck-${todo.id}">${todo.content}</label>
+    <i class="remove-todo far fa-times-circle"></i>
     </li>`;
   });
 
   $todos.innerHTML = html;
+  // +3. 추가구현) 체크된 숫자 표시하기 클릭 시 지워지는 버튼
+  $completed.textContent = todos.filter(todo => todo.completed).length;
+  // +4. 추가구현) 체크되지 않은 숫자 표시하기
+  $active.textContent = todos.filter(todo => !todo.completed).length;
 };
 
 // 1. 서버로부터 데이터 가져오기
@@ -37,10 +44,9 @@ window.onload = () => {
 };
 
 // 2. 입력 시 데이터 추가하기
+const generateId = () => (todos.length ? Math.max(...todos.map(todo => todo.id)) + 1 : 1);
 
-const generateId = () => (todos.length ? Math.max(...(todos.map((todo) => todo.id))) + 1 : 1);
-
-const addTodos = (content) => {
+const addTodos = content => {
   todos = [{ id: generateId(), content, completed: false }, ...todos];
   console.log('[addTodo]', todos);
 };
@@ -54,9 +60,8 @@ $input.onkeyup = ({ target, keyCode }) => {
 };
 
 // 3. remove 버튼 click 시 지우기
-
-const removeTodo = (id) => {
-  todos = todos.filter((todo) => todo.id !== +id);
+const removeTodo = id => {
+  todos = todos.filter(todo => todo.id !== +id);
 };
 
 $todos.onclick = ({ target }) => {
@@ -66,9 +71,8 @@ $todos.onclick = ({ target }) => {
 };
 
 // 4. check 클릭 시 completed 변경하기
-
-const toggleCompleted = (id) => {
-  todos = todos.map((todo) => (todo.id === +id ? {...todo, completed: !todo.completed } : todo));
+const toggleCompleted = id => {
+  todos = todos.map((todo) => (todo.id === +id ? { ...todo, completed: !todo.completed } : todo));
 };
 
 $todos.onchange = ({ target }) => {
@@ -77,5 +81,14 @@ $todos.onchange = ({ target }) => {
 };
 
 // +2. 추가구현) 전체 선택 구현하기
-// +3. 추가구현) 체크된 숫자 표시하고 클릭 시 지워지는 버튼
-// +4. 추가구현) 체크되지 않은 숫자 표시하기
+$completeAll.onclick = ({ target }) => {
+  // todos = todos.map((todo) => Object.assign(todo, { completed: target.checked }));
+  todos = todos.map((todo) => ({ ...todo, completed: target.checked }));
+  render();
+};
+
+// +3. 추가구현) 체크된 숫자 표시하기 클릭 시 지워지는 버튼
+$btnCheck.onclick = () => {
+  todos = todos.filter((todo) => !todo.completed);
+  render();
+};
