@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Popup</title>
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400);
+
+    button:focus{
+      outline: none;
+    }
+
+    body {
+      font-family: 'Open Sans';
+      font-weight: 300;
+      background-color: #D6E1E5;
+      width: 100vw;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    h1 {
+      color: #DB5B33;
+      font-weight: 300;
+      text-align: center;
+      margin : 0;
+      padding-top: 30px;
+    }
+
+    /* 팝업 UI 안보이게 하기 */
+    .popup{
+      position: absolute;
+      display: none;
+      width: 50vw;
+      height: 250px;
+      padding: 0 40px;
+      background: #fff;
+      top:0;
+      left: 20%;
+      z-index: 1;
+      margin-top: 20px;
+    }
+
+    .popup .btn-close{
+      border: none;
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #fff;
+    }
+
+    .popup h1{
+      padding-top: 30px;
+    }
+
+    .overlay{
+      display: none;
+      position: absolute;
+      top:0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(100, 100, 100, 0.5);
+    }
+
+    .toggle-popup{
+      margin-left: 20px;
+    }
+
+    /* CSS 작성 바랍니다. */
+  </style>
+</head>
+<body>
+  <h1>JavaScript Popup</h1>
+
+  <div class="popup">
+    <h1>JavaScript Popup</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+    <button class="btn-close">X</button>
+    <input type="text">
+    <button class="btn-ok">OK</button>
+    <button class="btn-cancel">Cancel</button>
+  </div>
+  <div class="overlay"></div>
+
+  <button class="toggle-popup">show popup</button>
+
+  <p class="popup-message"></p>
+
+  <script>
+    const $showPopup = document.querySelector('.toggle-popup');
+    const $popup = document.querySelector('.popup');
+    const $overlay = document.querySelector('.overlay');
+    const $btnPopupClose = document.querySelector('.btn-close');
+    const $input = document.querySelector('.popup input');
+    const $btnPopupOk = document.querySelector('.btn-ok');
+    const $inputValue = document.querySelector('.popup-message');
+    const $btnPopupCancle = document.querySelector('.btn-cancel');
+
+    const showPopup = () => {
+      $popup.style.display = 'inline-block';
+      $overlay.style.display = 'inline-block';
+    };
+
+    const closePopup = () => {
+      $popup.style.display = 'none';
+      $overlay.style.display = 'none';
+    };
+
+    const showInputValue = () => {
+      if ($input.value.trim() === '') return;
+      $inputValue.textContent = `form popup : ${$input.value}`;
+      $input.value = '';
+      closePopup();
+    };
+
+    $showPopup.onclick = showPopup;
+
+    $btnPopupClose.onclick = closePopup;
+    $overlay.onclick = closePopup;
+    $btnPopupCancle.onclick = closePopup;
+
+    $btnPopupOk.onclick = showInputValue;
+
+  </script>
+</body>
+</html>
