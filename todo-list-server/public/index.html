@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style></style>
+</head>
+<body>
+  <input type="text" class="content" placeholder="todo 입력하기">
+  <ul class="todos"></ul>
+
+<script>
+  const $todos = document.querySelector('.todos');
+  const $content = document.querySelector('.content');
+
+  let todos = [];
+
+  const render = (data) => {
+    todos = data;
+    let html = '';
+    todos.forEach((todo) => {
+      html += `
+        <li id="${todo.id}">
+          <label>
+            <input type="checkbox" class="input-todo" ${todo.completed ? 'checked' : ''} >
+            <span class="content">${todo.content}</span>
+          </label>
+          <button class="remove-btn">X</button>
+        </li>`;
+    });
+    $todos.innerHTML = html;
+  };
+
+  const get = (url, f) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.send();
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+      if (xhr.status === 200){
+        f(JSON.parse(xhr.response));
+      } else {
+        throw new Error(xhr.status);
+      }
+    };
+  };
+
+  const post = (url, f, payload) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.send(JSON.stringify(payload));
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+      if (xhr.status === 200){
+        f(JSON.parse(xhr.response));
+      } else {
+        throw new Error(xhr.status);
+      }
+    };
+  };
+
+  const del = (url, f, payload) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('DELETE', url);
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.send(JSON.stringify(payload));
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+      if (xhr.status === 200){
+        f(JSON.parse(xhr.response));
+      } else {
+        throw new Error(xhr.status);
+      }
+    };
+  };
+
+  const patch = (url, f, payload) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PATCH', url);
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.send(JSON.stringify(payload));
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+      if (xhr.status === 200){
+        f(JSON.parse(xhr.response));
+      } else {
+        throw new Error(xhr.status);
+      }
+    };
+  };
+
+  const getTodos = () => {
+    get('/todos', render);
+    // render();
+  };
+
+  const maxid = () => {
+    return todos.length ? Math.max(...todos.map((todo) => todo.id)) + 1 : 1;
+  };
+
+  const addTodo = ({ target, keyCode }) => {
+    const content = target.value.trim();
+    if (keyCode !== 13 || content === '') return;
+    target.value = '';
+    // todos = [...todos, { id: maxid, content: `${$content.value}`, completed: false }];
+    post('/todos', render, { id: maxid(), content, completed: false });
+    console.log('addTodo', todos);
+  };
+
+  const removeTodo = ({ target }) => {
+    if (!target.classList.contains('remove-btn')) return;
+    const id = +target.parentNode.id;
+    // todos = todos.filter((todo) => todo.id !== id);
+    del(`/todos/${id}`, render);
+  };
+
+  const checkTodo = ({ target }) => {
+    const id = +target.parentNode.id;
+    const completed = !todos.find((todo) => todo.id === +id).completed;
+    patch(`/todos/${id}`, render, { completed });
+    render();
+  };
+
+  // 초기값 가져오기
+  window.onload = getTodos;
+
+  // 입력하면 추가하기
+  $content.onkeyup = addTodo;
+
+  // 삭제버튼 클릭하면 삭제하기
+  $todos.onclick = removeTodo;
+
+  // 체크버튼 클릭
+  $todos.onchange = checkTodo;
+
+</script>
+</body>
+</html>
