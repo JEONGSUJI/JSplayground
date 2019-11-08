@@ -3,11 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
-  <style></style>
+  <style>
+
+  *:focus{
+    outline: none;
+  }
+
+  html{
+    margin: 0 auto;
+    width: 500px;
+  }
+
+  .content{
+    border-radius: 10px;
+    width: 80%;
+    margin: 0 auto;
+    height: 20px;
+    padding: 10px;
+    font-size: 18px;
+  }
+
+  .todos{
+    padding: 0;
+    list-style: none;
+  }
+
+  .img-table{
+    display: flex;
+    justify-content: center;
+  }
+
+  .img{
+    width: 300px;
+    height: 300px;
+  }
+
+  </style>
 </head>
 <body>
   <input type="text" class="content" placeholder="todo 입력하기">
   <ul class="todos"></ul>
+  <div class="img-table">
+    <img class="img" src="/abc.jpg" alt="image">
+  </div>
 
 <script>
   const $todos = document.querySelector('.todos');

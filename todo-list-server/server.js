@@ -16,6 +16,10 @@ app.get('/todos', (req, res) => {
   res.send(todos);
 });
 
+app.get('/image', (req, res) => {
+  res.send('');
+});
+
 app.post('/todos', (req, res) => {
   todos = [req.body, ...todos];
   res.send(todos);
