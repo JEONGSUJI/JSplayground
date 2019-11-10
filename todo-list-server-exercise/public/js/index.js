@@ -20,7 +20,7 @@ const render = (data) => {
   $todos.innerHTML = html;
 };
 
-const getTodos = (url, f) => {
+const getTodo = (url, f) => {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', url);
   xhr.send();
@@ -34,6 +34,33 @@ const getTodos = (url, f) => {
   };
 };
 
+const post = (url, f, payload) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', url);
+  xhr.setRequestHeader('Content-type', 'application/json')
+  xhr.send(JSON.stringify(payload));
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState !== XMLHttpRequest.DONE) return;
+    if (xhr.status === 200){
+      f(JSON.parse(xhr.response));
+    } else {
+      throw new Error(xhr.status);
+    }
+  };
+};
+
+const addTodo = ({ target, keyCode }) => {
+  const content = $input.value.trim();
+  if (keyCode !== 13 || content === '') return;
+  target.value = '';
+  const maxId = todos.length ? Math.max(...todos.map((todo) => todo.id)) + 1 : 1;
+  post('/todos', render, { id: maxId, content, completed: false });
+};
+
 window.onload = () => {
-  getTodos('/todos', render);
+  getTodo('/todos', render);
+};
+
+$input.onkeyup = (e) => {
+  addTodo(e);
 };

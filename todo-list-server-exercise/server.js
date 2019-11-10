@@ -16,10 +16,10 @@ app.get('/todos', (req, res) => {
   res.send(todos);
 });
 
-// app.post('/todos', (req, res) => {
-//   todos = [req.body, ...todos];
-//   res.send(todos);
-// });
+app.post('/todos', (req, res) => {
+  todos = [req.body, ...todos];
+  res.send(todos);
+});
 
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
