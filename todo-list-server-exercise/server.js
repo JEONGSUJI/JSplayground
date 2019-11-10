@@ -21,6 +21,12 @@ app.post('/todos', (req, res) => {
   res.send(todos);
 });
 
+app.delete('/todos/:id', (req, res) => {
+  const id = +req.params.id;
+  todos = todos.filter((todo) => todo.id !== id);
+  res.send(todos);
+});
+
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
 });
