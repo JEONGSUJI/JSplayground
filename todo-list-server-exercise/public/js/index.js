@@ -64,6 +64,21 @@ const del = (url, f, payload) => {
   };
 };
 
+const patch = (url, f, payload) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open('PATCH', url);
+  xhr.setRequestHeader('Content-type', 'application/json');
+  xhr.send(JSON.stringify(payload));
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState !== XMLHttpRequest.DONE) return;
+    if (xhr.status === 200){
+      f(JSON.parse(xhr.response));
+    } else {
+      throw new Error(xhr.status);
+    }
+  };
+};
+
 const addTodo = ({ target, keyCode }) => {
   const content = $input.value.trim();
   if (keyCode !== 13 || content === '') return;
@@ -78,6 +93,12 @@ const removeTodo = ({ target }) => {
   del(`/todos/${id}`, render);
 };
 
+const checkTodo = ({ target }) => {
+  const id = +target.parentNode.parentNode.id;
+  const completed = !todos.find((todo) => todo.id === +id).completed;
+  patch(`/todos/${id}`, render, { completed });
+};
+
 window.onload = () => {
   getTodo('/todos', render);
 };
@@ -88,4 +109,8 @@ $input.onkeyup = (e) => {
 
 $todos.onclick = (e) => {
   removeTodo(e);
+}
+
+$todos.onchange = (e) => {
+  checkTodo(e);
 }

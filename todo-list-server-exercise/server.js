@@ -27,6 +27,12 @@ app.delete('/todos/:id', (req, res) => {
   res.send(todos);
 });
 
+app.patch('/todos/:id', (req, res) =>{
+  const id = +req.params.id;
+  todos = todos.map((todo) => (todo.id === id ? {...todo , completed: !todo.completed } : todo));
+  res.send(todos);
+});
+
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
 });
