@@ -2,12 +2,12 @@ let todos = [];
 // DOMs
 const $todos = document.querySelector('.todos');
 const $input = document.querySelector('.input-todo');
-const $completeAll = document.querySelector('#ck-complete-all');
-const $clearCompleted = document.querySelector('.clear-completed > .btn');
+// const $completeAll = document.querySelector('#ck-complete-all');
+// const $clearCompleted = document.querySelector('.clear-completed > .btn');
 // const $completedTodos = document.querySelector('.completed-todos');
 // const $activeTodos = document.querySelector('.active-todos');
-const $nav = document.querySelector('.nav');
-const $navState = document.querySelector('.nav-state');
+// const $nav = document.querySelector('.nav');
+// const $navState = document.querySelector('.nav-state');
 
 const render = () => {
   let html = '';
@@ -28,20 +28,22 @@ const render = () => {
 
 const getTodos = async () => {
   // 서버로부터 todos 취득
-  todos = await axios.get('/todos').then((res) => { todos = res.data; }).then(render);
+  const res = await axios.get('/todos');
+  todos = res.data;
+  render();
   // todos.sort((todo1, todo2) => todo2.id - todo1.id);
 };
 
-window.onload = () => {
-  getTodos();
-};
+window.onload = getTodos;
 
 // addTodo
 
-const generateId = () => (todos.length ? Math.max(...(todos.map((todo) => todo.id))) + 1 : 1);
+const generateid = () => { todos.length ? Math.max(...todos.map((todo) => todo.id)) + 1 : 1; };
 
 const addTodo = async (content) => {
-  const Todo = await axios.post('/todos', { id: generateId(), content, completed: false }).then((res) => { todos = res.data; }).then(render);
+  const res = await axios.post('/todos', { id: generateid(), content, completed: false });
+  todos = res.data;
+  render();
 };
 
 $input.onkeyup = ({ target, keyCode }) => {
@@ -54,9 +56,12 @@ $input.onkeyup = ({ target, keyCode }) => {
 // checkTodo
 
 const toggleCompleted = async (id) => {
-  const completed = !todos.find((todo) => todo.id === +id).completed;
+  const completed = todos.find((todo) => todo.id === +id).completed;
   // console.log('[toggleCompleted]', todos);
-  const res = await axios.patch(`/todos/${id}`, { completed }).then(render);
+
+  const res = await axios.patch(`/todos/${id}`, { completed: !completed });
+  todos = res.data;
+  render();
 };
 
 $todos.onchange = ({ target }) => {
@@ -65,7 +70,9 @@ $todos.onchange = ({ target }) => {
 
 const removeTodo = async (id) => {
   // console.log('[removeTodo]', todos);
-  const res = await axios.delete(`/todos/${id}`).then((res) => { todos = res.data; }).then(render);
+  const res = await axios.delete(`/todos/${id}`);
+  todos = res.data;
+  render();
 };
 
 $todos.onclick = ({ target }) => {
@@ -73,30 +80,30 @@ $todos.onclick = ({ target }) => {
   removeTodo(target.parentNode.id);
 };
 
-const completeAll = (completed) => {
-  todos = todos.map((todo) => ({ ...todo, completed }));
-  console.log('[completeAll]', todos);
-  render();
-};
+// const completeAll = (completed) => {
+//   todos = todos.map((todo) => ({ ...todo, completed }));
+//   console.log('[completeAll]', todos);
+//   render();
+// };
 
-$completeAll.onclick = ({ target }) => {
-  completeAll(target.checked);
-};
+// $completeAll.onclick = ({ target }) => {
+//   completeAll(target.checked);
+// };
 
-const removeCompletedAll = () => {
-  todos = todos.filter((todo) => (!todo.completed));
-  console.log('[removeCompletedAll]', todos);
-  render();
-};
+// const removeCompletedAll = () => {
+//   todos = todos.filter((todo) => (!todo.completed));
+//   console.log('[removeCompletedAll]', todos);
+//   render();
+// };
 
-$clearCompleted.onclick = () => {
-  removeCompletedAll();
-};
+// $clearCompleted.onclick = () => {
+//   removeCompletedAll();
+// };
 
-$nav.onclick = ({ target }) => {
-  if (target.classList.contains('nav')) return;
-  [...$nav.children].forEach(($navItem) => {
-    $navItem.classList.toggle('active', $navItem === target);
-  });
-  $navState.textContent = target.id;
-};
+// $nav.onclick = ({ target }) => {
+//   if (target.classList.contains('nav')) return;
+//   [...$nav.children].forEach(($navItem) => {
+//     $navItem.classList.toggle('active', $navItem === target);
+//   });
+//   $navState.textContent = target.id;
+// };
