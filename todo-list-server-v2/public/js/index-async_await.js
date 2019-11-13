@@ -2,12 +2,12 @@ let todos = [];
 // DOMs
 const $todos = document.querySelector('.todos');
 const $input = document.querySelector('.input-todo');
-// const $completeAll = document.querySelector('#ck-complete-all');
-// const $clearCompleted = document.querySelector('.clear-completed > .btn');
-// const $completedTodos = document.querySelector('.completed-todos');
-// const $activeTodos = document.querySelector('.active-todos');
-// const $nav = document.querySelector('.nav');
-// const $navState = document.querySelector('.nav-state');
+const $completeAll = document.querySelector('#ck-complete-all');
+const $clearCompleted = document.querySelector('.clear-completed > .btn');
+const $completedTodos = document.querySelector('.completed-todos');
+const $activeTodos = document.querySelector('.active-todos');
+const $nav = document.querySelector('.nav');
+const $navState = document.querySelector('.nav-state');
 
 const render = () => {
   let html = '';
@@ -22,8 +22,8 @@ const render = () => {
   });
   $todos.innerHTML = html;
 
-  // $completedTodos.textContent = todos.filter((todo) => todo.completed).length;
-  // $activeTodos.textContent = todos.filter((todo) => !todo.completed).length;
+  $completedTodos.textContent = todos.filter((todo) => todo.completed).length;
+  $activeTodos.textContent = todos.filter((todo) => !todo.completed).length;
 };
 
 const getTodos = async () => {
@@ -38,7 +38,9 @@ window.onload = getTodos;
 
 // addTodo
 
-const generateid = () => { todos.length ? Math.max(...todos.map((todo) => todo.id)) + 1 : 1; };
+const generateid = () => { 
+  todos.length ? Math.max(...todos.map(todo => todo.id)) + 1 : 1;
+};
 
 const addTodo = async (content) => {
   const res = await axios.post('/todos', { id: generateid(), content, completed: false });
@@ -80,30 +82,30 @@ $todos.onclick = ({ target }) => {
   removeTodo(target.parentNode.id);
 };
 
-// const completeAll = (completed) => {
-//   todos = todos.map((todo) => ({ ...todo, completed }));
-//   console.log('[completeAll]', todos);
-//   render();
-// };
+const completeAll = (completed) => {
+  todos = todos.map((todo) => ({ ...todo, completed }));
+  console.log('[completeAll]', todos);
+  render();
+};
 
-// $completeAll.onclick = ({ target }) => {
-//   completeAll(target.checked);
-// };
+$completeAll.onclick = ({ target }) => {
+  completeAll(target.checked);
+};
 
-// const removeCompletedAll = () => {
-//   todos = todos.filter((todo) => (!todo.completed));
-//   console.log('[removeCompletedAll]', todos);
-//   render();
-// };
+const removeCompletedAll = () => {
+  todos = todos.filter((todo) => (!todo.completed));
+  console.log('[removeCompletedAll]', todos);
+  render();
+};
 
-// $clearCompleted.onclick = () => {
-//   removeCompletedAll();
-// };
+$clearCompleted.onclick = () => {
+  removeCompletedAll();
+};
 
-// $nav.onclick = ({ target }) => {
-//   if (target.classList.contains('nav')) return;
-//   [...$nav.children].forEach(($navItem) => {
-//     $navItem.classList.toggle('active', $navItem === target);
-//   });
-//   $navState.textContent = target.id;
-// };
+$nav.onclick = ({ target }) => {
+  if (target.classList.contains('nav')) return;
+  [...$nav.children].forEach(($navItem) => {
+    $navItem.classList.toggle('active', $navItem === target);
+  });
+  $navState.textContent = target.id;
+};
